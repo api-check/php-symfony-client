@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }} - Symfony ${{ matrix.symfony }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4']
+        symfony: ['6.4', '7.0', '7.1']
+        exclude:
+          - php: '8.1'
+            symfony: '7.1'
+        include:
+          - symfony: '6.4'
+            symfony_constraint: '^6.4'
+          - symfony: '7.0'
+            symfony_constraint: '^7.0'
+          - symfony: '7.1'
+            symfony_constraint: '^7.1'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer require symfony/config:${{ matrix.symfony_constraint }} symfony/dependency-injection:${{ matrix.symfony_constraint }} symfony/framework-bundle:${{ matrix.symfony_constraint }} --no-interaction --no-update
+          composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit --testdox

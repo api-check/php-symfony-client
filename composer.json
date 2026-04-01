@@ -1,0 +1,33 @@
+{
+    "name": "api-check/php-symfony-client",
+    "description": "ApiCheck Symfony Bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "api-check/php-client": "^2.0",
+        "symfony/config": "^6.4|^7.0",
+        "symfony/dependency-injection": "^6.4|^7.0",
+        "symfony/framework-bundle": "^6.4|^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ApiCheck\\Symfony\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ApiCheck\\Symfony\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "symfony": {
+            "bundle": {
+                "ApiCheck\\Symfony\\ApiCheckBundle": ["all"]
+            }
+        }
+    }
+}
